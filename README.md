@@ -1,8 +1,23 @@
 # redis_demo
 
-## Start docker 
+## Start docker using docker-compose.yml
 ```terminal
 docker compose up -d
+```
+
+## Start docker
+```termina
+docker compose start
+```
+
+## Stop docker 
+```termina
+docker compose stop
+```
+
+## Stop and delete containers
+```temrinal 
+docker compose down
 ```
 
 ## Redis prompt 
