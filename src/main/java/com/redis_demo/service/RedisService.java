@@ -15,4 +15,8 @@ public class RedisService {
   public void saveName(String name) {
     redisTemplate.opsForValue().set("name", name);
   }
+
+  public String getName(){
+    return redisTemplate.opsForValue().get("name");
+  }
 }
