@@ -1,10 +1,7 @@
 package com.redis_demo.controller;
 
 import com.redis_demo.service.RedisService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/redis")
@@ -19,5 +16,10 @@ public class RedisController {
   @PostMapping("/name")
   public void  saveName(@RequestParam String name) {
     redisService.saveName(name);
+  }
+
+  @GetMapping("/name")
+  public String getName(){
+    return redisService.getName();
   }
 }
