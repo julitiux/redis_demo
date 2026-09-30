@@ -1,5 +1,7 @@
 # redis_demo
 
+# DOCKER
+
 ## Start docker using docker-compose.yml
 ```terminal
 docker compose up -d
@@ -19,6 +21,20 @@ docker compose stop
 ```temrinal 
 docker compose down
 ```
+
+# HTTP
+
+## Post
+```terminal 
+http POST :8080/redis/name name==Julio
+```
+
+## Get
+```terminal 
+http GET :8080/redis/name
+```
+
+# REDIS
 
 ## Redis prompt 
 ```terminal
