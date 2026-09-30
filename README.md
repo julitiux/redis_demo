@@ -61,3 +61,8 @@ KEYS *
 ```terminal
 SCAN 0
 ```
+
+### Clean all keys 
+```terminal 
+FLUSHDB
+```
