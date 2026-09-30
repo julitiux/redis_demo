@@ -56,3 +56,8 @@ set product:3 → ...
 ```terminal
 KEYS *
 ```
+
+### Get all Keys too
+```terminal
+SCAN 0
+```
