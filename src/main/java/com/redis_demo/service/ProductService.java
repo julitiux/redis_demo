@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -25,29 +26,24 @@ public class ProductService {
 
     String key = "product:" + id;
 
-    String cachedProduct = redisTemplate
-      .opsForValue()
-      .get(key);
+    return Optional.ofNullable(
+        redisTemplate.opsForValue().get(key)
+      )
+      .map(json -> objectMapper.readValue(json, Product.class))
+      .orElseGet(() -> {
 
-    if (cachedProduct != null) {
-        return objectMapper.readValue(
-          cachedProduct,
-          Product.class
+        Product product = productRepository
+          .findById(id)
+          .orElseThrow();
+
+        String json = objectMapper.writeValueAsString(product);
+
+        redisTemplate.opsForValue().set(
+          key,
+          json,
+          Duration.ofSeconds(30)
         );
-    }
-
-    Product product = productRepository
-      .findById(id)
-      .orElseThrow();
-
-      String json = objectMapper.writeValueAsString(product);
-
-      redisTemplate.opsForValue().set(
-        key,
-        json,
-        Duration.ofSeconds(30)
-      );
-
-    return product;
+        return product;
+      });
   }
 }
