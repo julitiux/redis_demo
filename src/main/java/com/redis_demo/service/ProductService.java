@@ -46,4 +46,18 @@ public class ProductService {
         return product;
       });
   }
+
+  public Product updateProduct(Long id, Product product) {
+    Product existingProduct = productRepository.findById(id).orElseThrow();
+
+    existingProduct.setName(product.getName());
+    existingProduct.setPrice(product.getPrice());
+
+    Product updatedProduct = productRepository.save(existingProduct);
+
+    redisTemplate.delete("product:" + id);
+
+    return updatedProduct;
+  }
+
 }
