@@ -48,16 +48,19 @@ public class ProductService {
   }
 
   public Product updateProduct(Long id, Product product) {
-    Product existingProduct = productRepository.findById(id).orElseThrow();
 
-    existingProduct.setName(product.getName());
-    existingProduct.setPrice(product.getPrice());
+    return productRepository.findById(id)
+      .map(existingProduct -> {
+        existingProduct.setName(product.getName());
+        existingProduct.setPrice(product.getPrice());
 
-    Product updatedProduct = productRepository.save(existingProduct);
+        return productRepository.save(existingProduct);
+      })
+      .map(supdateProduct -> {
+        redisTemplate.delete("product:" + id);
 
-    redisTemplate.delete("product:" + id);
-
-    return updatedProduct;
+        return supdateProduct;
+      })
+      .orElseThrow();
   }
-
 }
