@@ -1,6 +1,6 @@
 package com.redis_demo.service;
 
-import com.redis_demo.entity.Product;
+import com.redis_demo.domain.entity.Product;
 import com.redis_demo.repository.ProductRepository;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.redis_demo.entity;
+package com.redis_demo.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
