@@ -1,7 +1,7 @@
 package com.redis_demo.controller;
 
 import com.redis_demo.domain.entity.Product;
-import com.redis_demo.service.ProductService;
+import com.redis_demo.infraestructure.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

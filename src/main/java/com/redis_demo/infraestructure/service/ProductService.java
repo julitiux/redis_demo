@@ -1,4 +1,4 @@
-package com.redis_demo.service;
+package com.redis_demo.infraestructure.service;
 
 import com.redis_demo.domain.entity.Product;
 import com.redis_demo.repository.ProductRepository;
