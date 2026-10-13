@@ -1,4 +1,4 @@
-package com.redis_demo.controller;
+package com.redis_demo.web;
 
 import com.redis_demo.domain.entity.Product;
 import com.redis_demo.infraestructure.service.ProductService;
