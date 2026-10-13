@@ -1,4 +1,4 @@
-package com.redis_demo.web;
+package com.redis_demo.infraestructure.web;
 
 import com.redis_demo.service.RedisService;
 import org.springframework.web.bind.annotation.*;
