@@ -1,7 +1,7 @@
 package com.redis_demo.infraestructure.service;
 
 import com.redis_demo.domain.entity.Product;
-import com.redis_demo.repository.ProductRepository;
+import com.redis_demo.domain.repository.ProductRepository;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;

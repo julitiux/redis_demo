@@ -1,4 +1,4 @@
-package com.redis_demo.repository;
+package com.redis_demo.domain.repository;
 
 import com.redis_demo.domain.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
