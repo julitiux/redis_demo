@@ -1,5 +1,6 @@
 package com.redis_demo.infraestructure.service;
 
+import com.redis_demo.domain.ProductDomainService;
 import com.redis_demo.domain.entity.Product;
 import com.redis_demo.domain.repository.ProductRepository;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,12 +13,12 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
-  private final ProductRepository productRepository;
+  private final ProductDomainService productDomainService;
   private final RedisTemplate<String, String> redisTemplate;
   private final ObjectMapper objectMapper;
 
-  public ProductService(ProductRepository productRepository, RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
-    this.productRepository = productRepository;
+  public ProductService(ProductRepository productRepository, ProductDomainService productDomainService, RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
+    this.productDomainService = productDomainService;
     this.redisTemplate = redisTemplate;
     this.objectMapper = objectMapper;
   }
@@ -32,7 +33,7 @@ public class ProductService {
       .map(json -> objectMapper.readValue(json, Product.class))
       .orElseGet(() -> {
 
-        Product product = productRepository
+        Product product = productDomainService
           .findById(id)
           .orElseThrow();
 
@@ -49,12 +50,12 @@ public class ProductService {
 
   public Product updateProduct(Long id, Product product) {
 
-    return productRepository.findById(id)
+    return productDomainService.findById(id)
       .map(existingProduct -> {
         existingProduct.setName(product.getName());
         existingProduct.setPrice(product.getPrice());
 
-        return productRepository.save(existingProduct);
+        return productDomainService.save(existingProduct);
       })
       .map(supdateProduct -> {
         redisTemplate.delete("product:" + id);
