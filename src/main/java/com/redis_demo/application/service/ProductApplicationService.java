@@ -30,17 +30,15 @@ public class ProductApplicationService {
 
   public Product updateProduct(Long id, Product product) {
 
-    return productDomainService.findById(id)
+    return productRepository.findById(id)
       .map(existingProduct -> {
         existingProduct.setName(product.getName());
         existingProduct.setPrice(product.getPrice());
-
-        return productDomainService.save(existingProduct);
+        return productRepository.save(existingProduct);
       })
-      .map(supdateProduct -> {
-        redisTemplate.delete("product:" + id);
-
-        return supdateProduct;
+      .map(updatedProduct -> {
+        productCache.evict(id);
+        return updatedProduct;
       })
       .orElseThrow();
   }
