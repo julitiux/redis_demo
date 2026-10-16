@@ -30,7 +30,7 @@ public class RedisProductCache implements ProductCache {
       .get(KEY_PREFIX + id);
 
     return Optional.ofNullable(json)
-      .map(value -> objectMapper.convertValue(value, Product.class));
+      .map(value -> objectMapper.readValue(value, Product.class));
   }
 
   @Override
