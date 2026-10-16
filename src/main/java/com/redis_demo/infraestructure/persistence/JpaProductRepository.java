@@ -4,7 +4,6 @@ import com.redis_demo.domain.entity.Product;
 import com.redis_demo.domain.repository.ProductRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.*;
 import java.util.Optional;
 
 @Repository
