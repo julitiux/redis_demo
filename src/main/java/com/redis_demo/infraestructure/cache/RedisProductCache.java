@@ -48,5 +48,6 @@ public class RedisProductCache implements ProductCache {
   @Override
   public void evict(Long id) {
 
+    redisTemplate.delete(KEY_PREFIX + id);
   }
 }
