@@ -1,49 +1,29 @@
 package com.redis_demo.application.service;
 
-import com.redis_demo.domain.ProductDomainService;
 import com.redis_demo.domain.entity.Product;
-import org.springframework.data.redis.core.RedisTemplate;
+import com.redis_demo.domain.repository.ProductCache;
+import com.redis_demo.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
-
-import java.time.Duration;
-import java.util.Optional;
 
 @Service
 public class ProductApplicationService {
 
-  private final ProductDomainService productDomainService;
-  private final RedisTemplate<String, String> redisTemplate;
-  private final ObjectMapper objectMapper;
+  private final ProductRepository productRepository;
+  private final ProductCache productCache;
 
-
-  public ProductApplicationService(ProductDomainService productDomainService, RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
-    this.productDomainService = productDomainService;
-    this.redisTemplate = redisTemplate;
-    this.objectMapper = objectMapper;
+  public ProductApplicationService(ProductRepository productRepository, ProductCache productCache) {
+    this.productRepository = productRepository;
+    this.productCache = productCache;
   }
 
   public Product getProduct(Long id) {
 
-    String key = "product:" + id;
-
-    return Optional.ofNullable(
-        redisTemplate.opsForValue().get(key)
-      )
-      .map(json -> objectMapper.readValue(json, Product.class))
+    return productCache.findById(id)
       .orElseGet(() -> {
+        Product product = productRepository.findById(id).orElseThrow();
 
-        Product product = productDomainService
-          .findById(id)
-          .orElseThrow();
+        productCache.save(product);
 
-        String json = objectMapper.writeValueAsString(product);
-
-        redisTemplate.opsForValue().set(
-          key,
-          json,
-          Duration.ofSeconds(30)
-        );
         return product;
       });
   }
