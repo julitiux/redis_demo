@@ -36,6 +36,13 @@ public class RedisProductCache implements ProductCache {
   @Override
   public void save(Product product) {
 
+    String json = objectMapper.writeValueAsString(product);
+
+    redisTemplate.opsForValue().set(
+      KEY_PREFIX + product.getId(),
+      json,
+      TTL
+    );
   }
 
   @Override
