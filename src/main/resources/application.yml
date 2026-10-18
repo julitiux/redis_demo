@@ -14,3 +14,8 @@ spring:
 
   jpa:
     show-sql: true
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 30s
