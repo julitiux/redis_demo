@@ -20,14 +20,7 @@ public class ProductApplicationService {
   @Cacheable(cacheNames = "products", key = "#id")
   public Product getProduct(Long id) {
 
-    return productCache.findById(id)
-      .orElseGet(() -> {
-        Product product = productRepository.findById(id).orElseThrow();
-
-        productCache.save(product);
-
-        return product;
-      });
+    return productRepository.findById(id).orElseThrow();
   }
 
   public Product updateProduct(Long id, Product product) {
