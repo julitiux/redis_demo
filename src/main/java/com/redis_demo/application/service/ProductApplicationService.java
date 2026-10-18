@@ -31,11 +31,8 @@ public class ProductApplicationService {
       .map(existingProduct -> {
         existingProduct.setName(product.getName());
         existingProduct.setPrice(product.getPrice());
+
         return productRepository.save(existingProduct);
-      })
-      .map(updatedProduct -> {
-        productCache.evict(id);
-        return updatedProduct;
       })
       .orElseThrow();
   }
