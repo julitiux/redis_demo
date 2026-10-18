@@ -3,6 +3,7 @@ package com.redis_demo.application.service;
 import com.redis_demo.domain.entity.Product;
 import com.redis_demo.domain.repository.ProductCache;
 import com.redis_demo.domain.repository.ProductRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class ProductApplicationService {
     return productRepository.findById(id).orElseThrow();
   }
 
+  @CacheEvict(cacheNames = "products", key = "#id")
   public Product updateProduct(Long id, Product product) {
 
     return productRepository.findById(id)
