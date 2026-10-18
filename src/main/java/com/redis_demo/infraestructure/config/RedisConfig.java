@@ -1,19 +1,14 @@
 package com.redis_demo.infraestructure.config;
 
-import com.redis_demo.domain.entity.Product;
-import org.springframework.boot.cache.autoconfigure.RedisCacheManagerBuilderCustomizer;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import tools.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
 
@@ -38,11 +33,9 @@ public class RedisConfig {
   }
 
   @Bean
-  public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+  public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    GenericJacksonJsonRedisSerializer serializer = new GenericJacksonJsonRedisSerializer(objectMapper);
+    JacksonJsonRedisSerializer<Object> serializer = new JacksonJsonRedisSerializer<>(Object.class);
 
     RedisCacheConfiguration configuration =
       RedisCacheConfiguration.defaultCacheConfig()
@@ -55,28 +48,18 @@ public class RedisConfig {
         );
 
     return RedisCacheManager.builder(redisConnectionFactory)
-      .cacheDefaults(configuration).build();
-  }
-
-
-  @Bean
-  public RedisCacheManagerBuilderCustomizer productCacheSerializer() {
-
-    JacksonJsonRedisSerializer<Product> serializer = new JacksonJsonRedisSerializer<>(Product.class);
-
-    RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
-      .entryTtl(Duration.ofSeconds(30))
-      .serializeKeysWith(
-        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+      .cacheDefaults(configuration)
+      .withCacheConfiguration(
+        "products",
+        RedisCacheConfiguration.defaultCacheConfig()
+          .entryTtl(Duration.ofSeconds(30))
+          .serializeKeysWith(
+            RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+          )
+          .serializeValuesWith(
+            RedisSerializationContext.SerializationPair.fromSerializer(new JacksonJsonRedisSerializer<>(com.redis_demo.domain.entity.Product.class))
+          )
       )
-      .serializeValuesWith(
-        RedisSerializationContext.SerializationPair.fromSerializer(serializer)
-      );
-
-    return builder -> builder.withCacheConfiguration(
-      "products",
-      configuration
-    );
+      .build();
   }
-
 }
